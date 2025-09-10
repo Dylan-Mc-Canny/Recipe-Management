@@ -1,0 +1,138 @@
+@model Recipe
+
+<partial name="_BreadCrumbs" model=@(new [] {
+    ("/","Home"),
+    ("/Recipe","Recipes"),
+    ("",$"{Model.Id}")
+}) />
+<body class="bg-primary-subtle">
+<div class="card rounded shadow p-4">
+
+    <!-- Title bar -->
+    <div class="border-bottom d-flex align-items-center justify-content-between mb-3">
+        <h3 class="text-primary">Edit Recipe</h3>
+    </div>
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="CreatorId" />
+        <input type="hidden" asp-for="CreatorUsername" />
+        <input type="hidden" asp-for="OverallReviewRating" />
+
+        <!-- Recipe Name Section -->
+        <div class="mt-3">
+            <label asp-for="RecipeName" class="form-label fw-bold fs-4">Recipe Name</label>
+            <input asp-for="RecipeName" class="form-control" maxlength="100" />
+            <span asp-validation-for="RecipeName" class="text-danger"></span>
+        </div <!-- Recipe Description Section -->
+        <div class="mt-3">
+            <label asp-for="RecipeDescription" class="form-label fw-bold fs-5">Recipe Description</label>
+            <textarea asp-for="RecipeDescription" class="form-control" rows="5"
+                placeholder="Add a detailed description of the recipe..."></textarea>
+            <span asp-validation-for="RecipeDescription" class="text-danger"></span>
+        </div>
+
+
+
+        <!-- Nutritional Info Section -->
+        <div class="mt-4 p-3 border rounded">
+            <h5 class="text-black fw-bold mb-3">Nutritional Info</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label asp-for="Calories" class="form-label fw-bold">Calories</label>
+                    <div class="input-group">
+                        <input asp-for="Calories" class="form-control" type="number"/>
+                        <span class="input-group-text">kcal</span>
+                    </div>
+                    <span asp-validation-for="Calories" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Protein" class="form-label fw-bold">Protein</label>
+                    <div class="input-group">
+                        <input asp-for="Protein" class="form-control" type="number" maxlength="4" />
+                        <span class="input-group-text">g</span>
+                    </div>
+                    <span asp-validation-for="Protein" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Carbohydrates" class="form-label fw-bold">Carbohydrates</label>
+                    <div class="input-group">
+                        <input asp-for="Carbohydrates" class="form-control" type="number" maxlength="4" />
+                        <span class="input-group-text">g</span>
+                    </div>
+                    <span asp-validation-for="Carbohydrates" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Fats" class="form-label fw-bold">Fats</label>
+                    <div class="input-group">
+                        <input asp-for="Fats" class="form-control" type="number" maxlength="4" />
+                        <span class="input-group-text">g</span>
+                    </div>
+                    <span asp-validation-for="Fats" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Required Section -->
+        <div class="mt-4 p-3 border rounded">
+            <h5 class="text-black fw-bold mb-3">Time Required</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="TimeHour" class="form-label fw-bold">Hours</label>
+                    <div class="input-group">
+                        <input asp-for="TimeHour" class="form-control" type="number" min="0" />
+                        <span class="input-group-text">hr</span>
+                    </div>
+                    <span asp-validation-for="TimeHour" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="TimeMin" class="form-label fw-bold">Minutes</label>
+                    <div class="input-group">
+                        <input asp-for="TimeMin" class="form-control" type="number" min="0" max="59" />
+                        <span class="input-group-text">min</span>
+                    </div>
+                    <span asp-validation-for="TimeMin" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ingredients Section -->
+        <div class="mt-3">
+            <label asp-for="Ingredients" class="form-label fw-bold fs-5">Ingredients</label>
+            <textarea asp-for="Ingredients" class="form-control" rows="6"
+                placeholder="List all the ingredients..."></textarea>
+            <span asp-validation-for="Ingredients" class="text-danger"></span>
+        </div>
+
+        <!-- Instructions Section -->
+        <div class="mt-3">
+            <label asp-for="Instructions" class="form-label fw-bold fs-5">Instructions</label>
+            <textarea asp-for="Instructions" class="form-control" rows="8"
+                placeholder="Detailed steps for preparing the recipe..."></textarea>
+            <span asp-validation-for="Instructions" class="text-danger"></span>
+        </div>
+
+        <!-- Recipe Photo URL Section -->
+        <div class="mt-3">
+            <label asp-for="RecipePhotoUrl" class="form-label fw-bold fs-5">Recipe Photo URL</label>
+            <input asp-for="RecipePhotoUrl" class="form-control" type="url"
+                placeholder="Enter image URL (e.g., https://example.com/image.jpg)" />
+            <span asp-validation-for="RecipePhotoUrl" class="text-danger"></span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-lg btn-primary" aria-label="create">Submit</button>
+            <a class="btn btn-lg btn-secondary mb-9 me-2" asp-action="Index" aria-label="cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

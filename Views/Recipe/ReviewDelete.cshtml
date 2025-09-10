@@ -1,0 +1,42 @@
+@model Review
+    
+<!-- TBC add a breadcrumb partial -->
+<partial name="_BreadCrumbs" model=@(new [] {
+    ("/","Home"),
+    ("/student","Students"),
+    ($"/student/details/{Model.RecipeId}", $"{Model.RecipeId}"),
+    ("","Ticket")
+}) />
+<body class="bg-primary-subtle">
+<div class="card rounded shadow p-4">
+    <!-- Title bar -->
+    <div class="border-bottom d-flex align-items-center justify-content-between mb-3">
+        <h3 class="text-primary">Delete Review</h3>
+    </div>
+
+    <h5 class="my-3 text-danger">Are you sure?</h5>
+
+    <!-- display the student using a <dl> as per Details.cshtml -->   
+    <dl class="row mt-3">       
+        <dt class="col-5">Review Message</dt>
+        <dd class="col-7">@Model.ReviewMessage</dd>
+
+        <dt class="col-5">Created</dt>
+        <dd class="col-7">@Model.CreatedOn.ToShortDateString()</dd>
+        
+    </dl>   
+
+    <div class="mt-4">
+        <!-- use a form with hidden input storing ticket id and studentId -->
+        <form asp-action="ReviewDeleteConfirm" type="post">   
+            <!-- hide non-editable values -->
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="RecipeId"/>
+
+            <button type="submit" class="btn btn-danger" aria-label="confirm">Confirm</button>
+            <a class="btn btn-secondary" asp-controller="Recipe" asp-action="Details" asp-route-id="@Model.recipe.Id" aria-label="cancel" >Cancel</a>
+        </form>
+    </div>
+    
+</div>
+</body>

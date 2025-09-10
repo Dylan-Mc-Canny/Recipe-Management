@@ -1,0 +1,84 @@
+@model Recipe
+
+<!-- Title -->
+<div class="mb-3 d-flex border-bottom align-items-center justify-content-between">
+
+    <h3 class="text-secondary">Reviews</h3>
+    <a asp-action="CreateReview" asp-route-id="@Model.Id" class="btn btn-sm btn-primary" aria-label="CreateReview">
+        <i class="bi bi-bag-plus-fill" title="CreateReview"></i>
+        <span class="ms-1 d-none d-md-inline btn-primary">Add Review</span>
+    </a>
+</div>
+
+<table class="table table-sm">
+    <thead>
+        <tr>          
+            <th>Username</th>
+            <th>Created</th>  
+            <th>Comment</th>       
+            <th>Rating</th>       
+            <th>Actions</th>  
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Reviews.Count == 0)
+        {
+            <tr>              
+                <td colspan="4">No Reviews...</td>
+            </tr>
+        }
+        else
+        {
+            @foreach(var t in Model.Reviews) {
+                <tr>             
+                        @if(@t.ReviewAuthor == @String.Empty)
+                        {  
+                            <td>guest</td>  
+                        }
+                        else
+                        {
+                            <td>@t.ReviewAuthor</td>  
+                        }
+                    
+                    <td>@t.CreatedOn</td>  
+                    <td>@t.ReviewMessage</td>
+                    <td>   @{
+                            double rating = t.ReviewRating;
+                        }
+                        @if (rating > 1)
+                        {
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= rating)
+                                {
+                                    <span class="fa fa-star text-warning"></span>
+                                }
+                                else
+                                {
+                                    <span class="fa fa-star text-secondary"></span>
+                                }
+                            }
+                        }</td>
+                    <td> 
+                       @if(@User.GetSignedInUserId() == t.ReviewAuthorId){
+                        <a asp-action="ReviewDelete" asp-route-id="@t.Id" class="btn btn-sm btn-outline-danger" >
+                            <i class="bi bi-trash-fill" title="delete ticket"></i>
+                            <span class="ms-1 d-none d-md-inline">Delete</span>    
+                        </a>
+                       
+                        <a asp-action="ReviewEdit" asp-route-id="@t.Id" class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-pen-fill" title="edit ticket"></i>
+                            <span class="ms-1 d-none d-md-inline">Edit</span>    
+                        </a>
+                        }
+                        @if(!(@User.GetSignedInUserId() == t.ReviewAuthorId))
+                        {
+                            <span class="ms-1 d-none d-md-inline">No Options available...</span> 
+                        }
+                    </td>             
+                </tr>
+                
+            }
+        }
+    </tbody>
+</table> 

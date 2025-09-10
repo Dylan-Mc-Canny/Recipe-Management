@@ -1,0 +1,40 @@
+@model Recipe
+
+<partial name="_BreadCrumbs" model=@(new [] { ("/","Home"), ("/recipe","Recipes"), ($"/Recipe/details/{Model.Id}",
+                               $"{Model.Id}"), ("","Delete") }) />
+
+<body class="bg-primary-subtle">
+  <div class="card rounded shadow p-4">
+    <!-- Title bar -->
+    <div class="border-bottom d-flex align-items-center justify-content-between mb-3">
+      <h3 class="text-primary">Delete Student</h3>
+    </div>
+
+    <h4 class="my-3 text-danger">Are you sure?</h4>
+
+    <!-- display the student using a <dl> as per Details.cshtml -->
+    <dl class="row">
+      <dt class="col-4 pb-1">Username</dt>
+      <dd class="col-8 pb-1">@Model.CreatorUsername</dd>
+
+      <dt class="col-4 pb-1">Recipe</dt>
+      <dd class="col-8 pb-1">@Model.RecipeName</dd>
+
+      <dt class="col-4 pb-1">Description</dt>
+      <dd class="col-8 pb-1">@Model.RecipeDescription</dd>
+
+      <dt class="col-4 pb-1">Photo</dt>
+      <dd class="col-8 pb-1">@Model.RecipePhotoUrl</dd>
+    </dl>
+
+    <div class="mt-4">
+      <form asp-action="DeleteConfirm">
+        <!-- student Id should be a hidden input field named 'Id' in the form -->
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn btn-danger" aria-label="delete">Delete</button>
+        <a class="btn btn-secondary" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+      </form>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,181 @@
+@model Recipe
+<style>
+.image {
+        display: block;
+        width: 300px;
+        height: 400px;
+        margin-top: 25px;
+        margin-bottom: 0px;
+s
+
+    }
+
+.info { 
+    height: 40px; 
+    bottom:0%;
+    width:100%; 
+    margin-top: 150px;
+    margin-right: 20px;
+}
+.text
+{
+    font-size: 20px
+}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<partial name="_BreadCrumbs" model=@(new [] { ("/","Home"), ("/Recipe","Recipes"),
+                                 ($"/Recipe/details/{Model.Id}",$"{Model.Id}"), ("","Details") }) />
+
+<body class="bg-primary-subtle">
+<div class="card rounded shadow p-4 text">
+    <div class="row">
+        <div class="col-12">
+            <div class="border-bottom d-flex align-items-center justify-content-between col-12 row">
+                <h2 class="text-primary mb-0 col-4">@Model.RecipeName</h2>
+                
+                <div class="col-4 row">
+                <div class="col-12 fs-2 mb-2 justify-content-between">
+                    @{
+                        double rating = Model.OverallReviewRating; // e.g. 3.5
+                    }
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= rating)
+                        {
+                            <span class="fa fa-star text-warning"></span> <!-- full yellow star -->
+                        }
+                        else
+                        {
+                            <span class="fa fa-star text-secondary"></span> <!-- grey star -->
+                        }
+                    }
+                </div>
+            </div>
+
+            <a asp-action="Index" class="btn btn-sm btn-primary mb-2 col-2" aria-label="Recipe list">
+                <i class="bi bi-list"></i> <span>Recipes</span>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- Main div -->
+<div class="row justify-content-between text">
+
+    <!-- Time and User Info start-->
+    <div class="col-6 mt-4">
+
+        <!-- Time and User Info start-->
+        <div class="row col-12 ms-2">
+            <!-- Creator start-->
+            <div class="mb-4  col-5 p-3">
+                <h5 class="fw-bold mb-2">Creator:</h5>
+                <p class="mb-0 fw-bold">@Model.CreatorUsername</p>
+            </div>
+            <!-- Creator End & Time start-->
+            <div class="mb-4  col-6 p-3 me-3">
+                <h5 class="fw-bold mb-3">Time Information:</h5>
+                <div class="row">
+                    <div class="col-6">
+                        <span class="fw-semibold">Hours:</span> @Model.TimeHour
+                    </div>
+                    <div class="col-6">
+                        <span class="fw-semibold">Minutes:</span> @Model.TimeMin
+                    </div>
+                </div>
+            </div>
+            <!-- Creator End & Time start-->
+        </div>
+        <!-- Description -->
+        <div class="mb-4  p-3 justify-content-between me-2">
+            <h5 class="fw-bold">Description:</h5>
+            <span class="fw-semibold">@Model.RecipeDescription</span>
+        </div>
+
+        <!-- Start for Ingredients & Instructions-->
+            <div class="mb-4  col-12 p-3 ">
+                <h5 class="fw-bold mb-3">Ingredients:</h5>
+                <div class="row">
+                    <div class="col-12">
+                        <span class="fw-semibold">@Model.Ingredients</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4  col-12 p-3 me-2">
+                <h5 class="fw-bold mb-3">Instructions:</h5>
+                <div class="row">
+                    <div class="col-12">
+                        <span class="fw-semibold">@Model.Instructions</span>
+                    </div>
+                </div>
+            </div>
+        <!-- End for Ingredients & Instructions-->
+        <!-- Start for Nutritional Information-->
+        <div class="row justify-content-between p-3">
+            <div class=" col-12 row p-3">
+                <div class="row col-12">
+                    <h5 class="fw-bold mb-3 col-6">Nutritional Information:</h5>
+                </div>
+
+                <div class="col-6">
+                    <span class="fw-bold">Calories:</span>
+                    <span>@Model.Calories</span>
+                </div>
+                <div class="col-6">
+                    <span class="fw-bold col-8 ">Protein:</span>
+                    <span class="col-4">@Model.Protein</span>
+                </div>
+                <div class="col-6">
+                    <span class="fw-bold ">Carbohydrates:</span>
+                    <span>@Model.Carbohydrates</span>
+                </div>
+                <div class="col-6">
+                    <span class="fw-bold ">Fats:</span>
+                    <span>@Model.Fats</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End of Information Section -->
+
+    <!-- Start of Image Section -->
+    <div class="col-6 mt-4 text-center">
+        @if (!string.IsNullOrEmpty(Model.RecipePhotoUrl))
+        {
+            <img src="@Model.RecipePhotoUrl" class="img-fluid rounded mb-3 " alt="Recipe photo" />
+            <h5 class="mb-0 d-flex justify-content-center align-items-center ">Serves: @Model.Servings</h5>
+        }
+        else
+        {
+            <span class="text-muted" aria-label="missing recipe photo">No photo available</span>
+        }
+
+        <div class="info ">
+            @if (@User.GetSignedInUserId() == Model.CreatorId)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-lg btn-primary mb-9 me-2">
+                    <i class="bi bi-pencil"></i> <span>Edit</span>
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-lg btn-secondary mb-9 ms-2">
+                    <i class="bi bi-trash"></i> <span>Delete</span>
+                </a>
+            }
+            else{
+                <span>No Options Available...</span>
+            }
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Reviews Section -->
+<hr class="my-4" />
+<div class="container">
+    <div class="card rounded shadow p-4 mt-4 col-12">
+        <partial name="_Reviews" />
+    </div>
+</div>
+</body>

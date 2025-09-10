@@ -1,0 +1,151 @@
+@model RecipeSearchViewModel
+
+<partial name="_BreadCrumbs" model=@(new[] { ("/", "Home"), ("", "Recipes") }) />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<style>
+    .recipe-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .image {
+        display: block;
+        width: 100%;
+        height: 300px;
+        margin-top: 25px;
+        margin-bottom: 0px;
+
+
+    }
+
+    .overlay {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        text-align: center;
+
+    }
+
+    .recipe-card:hover .overlay {
+        opacity: 1;
+    }
+
+    .text {
+        font-size: 1.5rem;
+    }
+
+    .body {
+        ;
+    }
+
+    }
+    }
+</style>
+<body class="bg-primary-subtle">
+<div class="card border rounded shadow p-4 col-12">
+    <div class="d-flex align-items-center gap-4 flex-wrap">
+        <div class="col-1" style="margin-bottom: 1px;">
+            <b><u>Sort By: </u></b>
+        </div>
+
+        <!-- Recipe Name -->
+        <div>
+            Recipe Name
+            <a class="btn btn-link p-0" asp-action="Index" asp-route-orderBy="name" asp-route-direction="asc">
+                <i class="bi bi-caret-up"></i>
+            </a>
+            <a class="btn btn-link p-0" asp-action="Index" asp-route-orderBy="name" asp-route-direction="desc">
+                <i class="bi bi-caret-down"></i>
+            </a>
+        </div>
+
+        <!-- Ratings -->
+        <div>
+            Ratings
+            <a class="btn btn-link p-0" asp-action="Index" asp-route-orderBy="rating" asp-route-direction="desc">
+                <i class="bi bi-caret-up"></i>
+            </a>
+            <a class="btn btn-link p-0" asp-action="Index" asp-route-orderBy="rating" asp-route-direction="asc">
+                <i class="bi bi-caret-down"></i>
+            </a>
+        </div>
+
+        <!-- Calories -->
+        <div>
+            Calories
+            <a class="btn btn-link p-0" asp-action="Index" asp-route-orderBy="calories" asp-route-direction="desc">
+                <i class="bi bi-caret-up"></i>
+            </a>
+            <a class="btn btn-link p-0" asp-action="Index" asp-route-orderBy="calories" asp-route-direction="asc">
+                <i class="bi bi-caret-down"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+    <div class="card border rounded shadow p-4 container">
+
+
+
+        <!-- Title bar -->
+        <div class="d-flex align-items-center justify-content-between mb-3 container">
+            <h3 class="text-primary">Recipes</h3>
+            <a class="btn btn-sm btn-primary col-2" asp-condition=@User.HasOneOfRoles("User,admin") asp-action="Create"
+                title="Add Recipe" aria-label="Add Recipe">
+                <i class="bi bi-plus"></i>Create
+            </a>
+        </div>
+
+        <partial name="_Search" />
+
+        <div class="row container">
+            @foreach (var ExistingRecipes in Model.Recipes)
+            {
+                <div class="col-12 col-lg-4 recipe-card ">
+
+                    <img src="@ExistingRecipes.RecipePhotoUrl" class="image" alt="@ExistingRecipes.RecipeName">
+                    <a asp-action="Details" asp-controller="Recipe" asp-route-id="@ExistingRecipes.Id"
+                        class="overlay d-flex align-items-center justify-content-center text-decoration-none">
+                        <div class="text text-white col-12">@ExistingRecipes.RecipeDescription</div>
+                    </a>
+
+                    <div class="recipe-info p-2 row">
+                        <p class="col-6 mt-4 bold"><b>@ExistingRecipes.RecipeName</b></p>
+                        <p class="mb-0 d-flex justify-content-center align-items-center col-6 mt-1">
+                            @{
+                                double rating = ExistingRecipes.OverallReviewRating;
+                            }
+                            @if (rating > 1)
+                            {
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= rating)
+                                    {
+                                        <span class="fa fa-star text-warning"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fa fa-star text-secondary"></span>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <span><b>No Reviews....</b></span>
+                            }
+                        </p>
+                        <p class="col-6 mt-4 bold"><u>Click to View</u></p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+</body>
